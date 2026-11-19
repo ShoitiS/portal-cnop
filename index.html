@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNOP | Coordenadoria Norte Oeste Paulista - Dashboard & Portal</title>
+    <title>CNOP | Coordenadoria Norte Oeste Paulista - Dashboard &amp; Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -99,7 +99,7 @@
         }
 
         main {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 2rem auto;
             padding: 0 20px;
         }
@@ -193,18 +193,16 @@
             font-weight: 600;
         }
 
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        .charts-stack {
+            display: flex;
+            flex-direction: column;
             gap: 20px;
             margin-bottom: 1.8rem;
         }
 
-        /* Linha inferior: Gráfico de Rosca + 3 Cartões Verticais */
-        .donut-row {
-            grid-column: 1 / -1;
+        .combined-row {
             display: grid;
-            grid-template-columns: 1.45fr 1fr;
+            grid-template-columns: 1.05fr 1.25fr 0.95fr;
             gap: 20px;
             align-items: stretch;
         }
@@ -212,13 +210,13 @@
         .vertical-kpis {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
             justify-content: space-between;
         }
 
         .side-kpi-card {
             background: var(--white);
-            padding: 1.1rem 1.3rem;
+            padding: 1rem 1.2rem;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             border-left: 4px solid var(--primary);
@@ -232,7 +230,7 @@
         .side-kpi-card.navy { border-left-color: var(--primary-dark); }
 
         .side-kpi-label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
             color: var(--text-muted);
@@ -240,46 +238,44 @@
         }
 
         .side-kpi-main {
-            font-size: 1.45rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary-dark);
-            margin: 3px 0;
+            margin: 2px 0;
             line-height: 1.25;
         }
 
         .side-kpi-pct {
             color: var(--accent);
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
         }
 
         .side-kpi-sub {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--primary);
             font-weight: 600;
         }
 
         .chart-card {
             background: var(--white);
-            padding: 1.5rem;
+            padding: 1.4rem;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-        }
-
-        .chart-card.wide {
-            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
         }
 
         .chart-card h3 {
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             color: var(--primary-dark);
             margin-bottom: 0.25rem;
         }
 
         .chart-caption {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 1rem;
+            margin-bottom: 0.9rem;
         }
 
         .rm-chart-wrap {
@@ -288,16 +284,11 @@
             height: 520px;
         }
 
-        .donut-chart-wrap {
+        .donut-chart-wrap, .bar-chart-wrap {
             position: relative;
             width: 100%;
-            height: 310px;
-        }
-
-        .bar-chart-wrap {
-            position: relative;
-            width: 100%;
-            height: 270px;
+            flex: 1;
+            min-height: 290px;
         }
 
         .insights-grid {
@@ -359,6 +350,14 @@
 
         .photo-info { padding: 1rem; }
 
+        .photo-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
         .photo-tag {
             display: inline-block;
             background: #FEF3C7;
@@ -367,7 +366,12 @@
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 4px;
-            margin-bottom: 6px;
+        }
+
+        .item-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
         .photo-info h4 {
@@ -436,9 +440,22 @@
             border-top: 1px solid var(--border);
         }
 
-        @media (max-width: 900px) {
-            .donut-row {
+        @media (max-width: 1120px) {
+            .combined-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .vertical-kpis {
+                grid-column: 1 / -1;
+                flex-direction: row;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .combined-row {
                 grid-template-columns: 1fr;
+            }
+            .vertical-kpis {
+                flex-direction: column;
             }
         }
     </style>
@@ -499,8 +516,8 @@
                 </div>
             </div>
 
-            <div class="charts-grid">
-                <div class="chart-card wide">
+            <div class="charts-stack">
+                <div class="chart-card">
                     <h3 id="titulo-rm">Distribuição por RM/RE (Juventude Soka vs. Simpatizantes)</h3>
                     <p class="chart-caption">Todas as RM/RE da seleção em ordem alfabética (Juventude Soka vs. Simpatizantes).</p>
                     <div class="rm-chart-wrap">
@@ -508,18 +525,18 @@
                     </div>
                 </div>
 
-                <div class="chart-card">
-                    <h3>Transição Etária 2027–2030 (Base vs. Liderança)</h3>
-                    <p class="chart-caption">1.112 pessoas (30–39a) em transição adulta vs. 2.256 jovens até 29a de renovação.</p>
-                    <div class="bar-chart-wrap">
-                        <canvas id="chartTransicao"></canvas>
-                    </div>
-                </div>
-
-                <div class="donut-row">
+                <div class="combined-row">
                     <div class="chart-card">
-                        <h3>Grau de Estudo do Budismo (Kyogaku)</h3>
-                        <p class="chart-caption">76,1% (2.946) em Admissão; passagem para 1º Grau (489) e graus avançados é o gargalo-chave.</p>
+                        <h3>Transição Etária 2027–2030</h3>
+                        <p class="chart-caption">Base vs. liderança nas faixas etárias.</p>
+                        <div class="bar-chart-wrap">
+                            <canvas id="chartTransicao"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Grau de Estudo (Kyogaku)</h3>
+                        <p class="chart-caption">76,1% em Admissão; gargalo até 1º Grau.</p>
                         <div class="donut-chart-wrap">
                             <canvas id="chartKyogaku"></canvas>
                         </div>
@@ -590,6 +607,120 @@
                 .replace(/[_-]+/g, " ");
         }
 
+        function dataValida(ano, mes, dia) {
+            const a = Number(ano);
+            const m = Number(mes);
+            const d = Number(dia);
+            if (a < 1900 || a > 2100 || m < 1 || m > 12 || d < 1 || d > 31) return null;
+            const dt = new Date(Date.UTC(a, m - 1, d));
+            if (
+                dt.getUTCFullYear() !== a ||
+                dt.getUTCMonth() !== m - 1 ||
+                dt.getUTCDate() !== d
+            ) {
+                return null;
+            }
+            return dt;
+        }
+
+        // Extrai data do nome do arquivo para ordenação decrescente (mais recente -> mais antiga)
+        function extrairDataDoNome(nomeArquivo) {
+            const base = nomeArquivo.replace(/\.[^/.]+$/, "");
+
+            // 1. AAAA-MM-DD ou AAAA_MM_DD ou AAAA.MM.DD
+            let m = base.match(/(?:^|[^0-9])((?:19|20)\d{2})[-_.](\d{2})[-_.](\d{2})(?:[^0-9]|$)/);
+            if (m) {
+                const dt = dataValida(m[1], m[2], m[3]);
+                if (dt) {
+                    return {
+                        timestamp: dt.getTime(),
+                        label: `${String(m[3]).padStart(2, '0')}/${String(m[2]).padStart(2, '0')}/${m[1]}`
+                    };
+                }
+            }
+
+            // 2. DD-MM-AAAA ou DD_MM_AAAA ou DD.MM.AAAA
+            m = base.match(/(?:^|[^0-9])(\d{2})[-_.](\d{2})[-_.]((?:19|20)\d{2})(?:[^0-9]|$)/);
+            if (m) {
+                const dt = dataValida(m[3], m[2], m[1]);
+                if (dt) {
+                    return {
+                        timestamp: dt.getTime(),
+                        label: `${String(m[1]).padStart(2, '0')}/${String(m[2]).padStart(2, '0')}/${m[3]}`
+                    };
+                }
+            }
+
+            // 3. AAAAMMDD compacto
+            m = base.match(/(?:^|[^0-9])((?:19|20)\d{2})(\d{2})(\d{2})(?:[^0-9]|$)/);
+            if (m) {
+                const dt = dataValida(m[1], m[2], m[3]);
+                if (dt) {
+                    return {
+                        timestamp: dt.getTime(),
+                        label: `${m[3]}/${m[2]}/${m[1]}`
+                    };
+                }
+            }
+
+            // 4. DDMMAAAA compacto
+            m = base.match(/(?:^|[^0-9])(\d{2})(\d{2})((?:19|20)\d{2})(?:[^0-9]|$)/);
+            if (m) {
+                const dt = dataValida(m[3], m[2], m[1]);
+                if (dt) {
+                    return {
+                        timestamp: dt.getTime(),
+                        label: `${m[1]}/${m[2]}/${m[3]}`
+                    };
+                }
+            }
+
+            // 5. AAAA-MM ou AAAA_MM (usa último dia do mês para ordenação)
+            m = base.match(/(?:^|[^0-9])((?:19|20)\d{2})[-_.](\d{2})(?:[^0-9]|$)/);
+            if (m) {
+                const ultimoDia = new Date(Date.UTC(Number(m[1]), Number(m[2]), 0)).getUTCDate();
+                const dt = dataValida(m[1], m[2], ultimoDia);
+                if (dt) {
+                    return {
+                        timestamp: dt.getTime(),
+                        label: `${m[2]}/${m[1]}`
+                    };
+                }
+            }
+
+            // 6. MM-AAAA ou MM_AAAA (usa último dia do mês para ordenação)
+            m = base.match(/(?:^|[^0-9])(\d{2})[-_.]((?:19|20)\d{2})(?:[^0-9]|$)/);
+            if (m) {
+                const ultimoDia = new Date(Date.UTC(Number(m[2]), Number(m[1]), 0)).getUTCDate();
+                const dt = dataValida(m[2], m[1], ultimoDia);
+                if (dt) {
+                    return {
+                        timestamp: dt.getTime(),
+                        label: `${m[1]}/${m[2]}`
+                    };
+                }
+            }
+
+            return { timestamp: -Infinity, label: "" };
+        }
+
+        function ordenarItensPorDataNome(itens) {
+            return itens
+                .map((item, idx) => {
+                    const info = extrairDataDoNome(item.name);
+                    return {
+                        item,
+                        timestamp: info.timestamp,
+                        dataFormatada: info.label,
+                        idx
+                    };
+                })
+                .sort((a, b) => {
+                    if (b.timestamp !== a.timestamp) return b.timestamp - a.timestamp;
+                    return a.item.name.localeCompare(b.item.name, 'pt-BR');
+                });
+        }
+
         async function carregarFotosAutomaticas() {
             const container = document.getElementById('galeria-automatica');
             try {
@@ -603,11 +734,16 @@
                     container.innerHTML = '<p class="status-msg">Nenhuma foto encontrada na pasta /fotos ainda.</p>';
                     return;
                 }
-                container.innerHTML = imagens.map(img => `
+
+                const ordenadas = ordenarItensPorDataNome(imagens);
+                container.innerHTML = ordenadas.map(({ item: img, dataFormatada }) => `
                     <div class="photo-card">
                         <img src="./fotos/${encodeURIComponent(img.name)}" alt="${formatarTitulo(img.name)}" loading="lazy">
                         <div class="photo-info">
-                            <span class="photo-tag">Registro CNOP</span>
+                            <div class="photo-meta-row">
+                                <span class="photo-tag">Registro CNOP</span>
+                                ${dataFormatada ? `<span class="item-date">${dataFormatada}</span>` : ''}
+                            </div>
                             <h4>${formatarTitulo(img.name)}</h4>
                         </div>
                     </div>
@@ -630,14 +766,19 @@
                     container.innerHTML = '<p class="status-msg">Nenhum documento encontrado na pasta /arquivos ainda.</p>';
                     return;
                 }
-                container.innerHTML = docs.map(doc => {
+
+                const ordenados = ordenarItensPorDataNome(docs);
+                container.innerHTML = ordenados.map(({ item: doc, dataFormatada }) => {
                     const extensao = doc.name.split('.').pop().toUpperCase();
                     const tamanhoKB = Math.max(1, Math.round(doc.size / 1024));
+                    const metaTexto = dataFormatada
+                        ? `${extensao} • ${tamanhoKB} KB • ${dataFormatada}`
+                        : `${extensao} • ${tamanhoKB} KB`;
                     return `
                         <div class="file-card">
                             <div class="file-info">
                                 <h4>📄 ${formatarTitulo(doc.name)}</h4>
-                                <p>${extensao} • ${tamanhoKB} KB</p>
+                                <p>${metaTexto}</p>
                             </div>
                             <a href="./arquivos/${encodeURIComponent(doc.name)}" target="_blank" class="btn-download">Abrir / Baixar</a>
                         </div>
@@ -814,14 +955,14 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '58%',
+                cutout: '56%',
                 plugins: {
                     legend: {
                         position: 'right',
                         labels: {
-                            boxWidth: 14,
-                            padding: 12,
-                            font: { size: 12 }
+                            boxWidth: 12,
+                            padding: 10,
+                            font: { size: 11.5 }
                         }
                     },
                     tooltip: {
