@@ -764,4 +764,160 @@
             data: {
                 labels: initialData.rm_labels,
                 datasets: [
-                    { label: 'Juventude Soka (JS)', data: initialData.rm_js, background
+                    { label: 'Juventude Soka (JS)', data: initialData.rm_js, backgroundColor: '#4472B8', borderRadius: 4 },
+                    { label: 'Simpatizantes (SIMP)', data: initialData.rm_simp, backgroundColor: '#D99B26', borderRadius: 4 }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    x: { stacked: true, beginAtZero: true },
+                    y: { stacked: true }
+                }
+            }
+        });
+
+        const chartTransicao = new Chart(document.getElementById('chartTransicao').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Até 17a', '18–29a', '30–39a', '40+ anos'],
+                datasets: [
+                    { label: 'Total da Base', data: initialData.faixas_base, backgroundColor: '#4472B8', borderRadius: 4 },
+                    { label: 'Com Função', data: initialData.faixas_lideres, backgroundColor: '#D99B26', borderRadius: 4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        const chartKyogaku = new Chart(document.getElementById('chartKyogaku').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Admissão', '1º Grau', '2º Grau', 'Grau Médio', 'Grau Superior', 'Prof. Adjunto'],
+                datasets: [{
+                    data: initialData.kyogaku,
+                    backgroundColor: ['#4472B8', '#D99B26', '#B93B3B', '#2B4C7E', '#0F766E', '#64748B'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '58%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 14,
+                            padding: 12,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const val = ctx.parsed;
+                                const pct = total > 0 ? ((val / total) * 100).toFixed(1).replace('.', ',') : '0,0';
+                                return ` ${ctx.label}: ${fmtNum(val)} (${pct}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        function renderInsights(d) {
+            const admPct = fmtPct((d.kyogaku[0] / d.total) * 100);
+            const lgpdPendentes = d.total - d.lgpd_qtd;
+            const renovacaoBase = d.faixas_base[0] + d.faixas_base[1];
+            const renovacaoPct = fmtPct((renovacaoBase / d.total) * 100);
+
+            document.getElementById('painel-insights').innerHTML = `
+                <div class="insight-card goal">
+                    <h4>🎯 Transição &amp; Sucessão (2027–2030)</h4>
+                    <ul>
+                        <li><strong>${fmtNum(d.faixas_lideres[2])} líderes</strong> estão entre <strong>30–39 anos</strong> e farão transição natural até 2030.</li>
+                        <li><strong>${fmtNum(d.potenciais_sucessores)} jovens (18–29a)</strong> sem função atual já têm <strong>1º Grau+</strong> para assumir novos papéis.</li>
+                        <li><strong>${fmtNum(renovacaoBase)} cadastros até 29 anos</strong> (${renovacaoPct} da base) sustentam a renovação geracional.</li>
+                    </ul>
+                </div>
+                <div class="insight-card warn">
+                    <h4>⚠️ Gargalos de Formação &amp; LGPD</h4>
+                    <ul>
+                        <li><strong>Kyogaku:</strong> ${admPct} (${fmtNum(d.kyogaku[0])}) em <em>Admissão</em>; destravar a passagem para o 1º Grau é prioridade.</li>
+                        <li><strong>LGPD:</strong> ${fmtNum(lgpdPendentes)} cadastros (${fmtPct(100 - d.lgpd_pct)}) ainda sem aceite, limitando contato digital direto.</li>
+                        <li><strong>Engajamento:</strong> ${fmtPct(d.kofu_pct)} no Kofu e ${fmtPct(d.impressos_pct)} em Impressos — reforça canais digitais ágeis.</li>
+                    </ul>
+                </div>
+                <div class="insight-card">
+                    <h4>🛠️ Liderança, Simpatizantes &amp; Saneamento</h4>
+                    <ul>
+                        <li><strong>Capilaridade:</strong> ${d.frente_pct} da liderança (${fmtNum(d.frente_qtd)} de ${fmtNum(d.funcoes)}) atua em <em>Bloco</em> e <em>Comunidade</em> (1 líder / ${d.ratio_js_lider} JS).</li>
+                        <li><strong>Simpatizantes:</strong> ${fmtNum(d.simp)} registros (${fmtPct((d.simp / d.total) * 100)}) concentram faixa 40+ e pedem abordagem própria.</li>
+                        <li><strong>Saneamento:</strong> ${d.sem_rm} sem RM/RE e ${d.sem_idade} sem idade numérica nesta seleção.</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function updateDashboard() {
+            const sub = document.getElementById('subFilter').value;
+            const d = dadosCNOP[sub];
+            const jsShare = fmtPct((d.js / d.total) * 100);
+            const subLabel = d.subs_count === 1 ? '1 Sub' : `${d.subs_count} Subs`;
+
+            document.getElementById('kpi-total').innerText = fmtNum(d.total);
+            document.getElementById('kpi-sub-familias').innerText = `${fmtNum(d.familias)} famílias • ${d.sem_rm} sem RM/RE`;
+
+            document.getElementById('kpi-js').innerText = fmtNum(d.js);
+            document.getElementById('kpi-sub-js').innerText = `${jsShare} da base • ${fmtNum(d.funcoes)} c/ função (1 p/ ${d.ratio_js_lider})`;
+
+            document.getElementById('kpi-lgpd').innerText = fmtPct(d.lgpd_pct);
+            document.getElementById('kpi-sub-lgpd').innerText = `${fmtNum(d.lgpd_qtd)} aceitaram • ${fmtNum(d.faixas_lideres[2])} líd. (30–39a)`;
+
+            document.getElementById('kpi-kofu').innerText = fmtPct(d.kofu_pct);
+            document.getElementById('kpi-sub-impressos').innerText = `${fmtNum(d.kofu_qtd)} Kofu • ${fmtPct(d.impressos_pct)} Imp. • ${fmtNum(d.potenciais_sucessores)} sucessores`;
+
+            document.getElementById('side-kofu-ratio').innerHTML = `${fmtNum(d.kofu_qtd)} / ${fmtNum(d.total)} <span class="side-kpi-pct">(${fmtPct(d.kofu_pct)})</span>`;
+            document.getElementById('side-imp-ratio').innerHTML = `${fmtNum(d.impressos_qtd)} / ${fmtNum(d.total)} <span class="side-kpi-pct">(${fmtPct(d.impressos_pct)})</span>`;
+            document.getElementById('side-org-estrutura').innerText = `${subLabel} | ${d.rm_count} RM | ${d.dist_count} Distritos`;
+
+            document.getElementById('titulo-rm').innerText = sub === 'TODAS'
+                ? 'Distribuição por RM/RE (Juventude Soka vs. Simpatizantes)'
+                : `RM/RE em ${sub} (Juventude Soka vs. Simpatizantes)`;
+
+            ajustarAlturaRm(d.rm_labels.length);
+            chartRm.data.labels = d.rm_labels;
+            chartRm.data.datasets[0].data = d.rm_js;
+            chartRm.data.datasets[1].data = d.rm_simp;
+            chartRm.resize();
+            chartRm.update();
+
+            chartTransicao.data.datasets[0].data = d.faixas_base;
+            chartTransicao.data.datasets[1].data = d.faixas_lideres;
+            chartTransicao.update();
+
+            chartKyogaku.data.datasets[0].data = d.kyogaku;
+            chartKyogaku.update();
+
+            renderInsights(d);
+        }
+
+        renderInsights(initialData);
+        carregarFotosAutomaticas();
+        carregarArquivosAutomaticos();
+    </script>
+</body>
+</html>
