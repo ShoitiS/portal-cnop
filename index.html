@@ -34,11 +34,12 @@
         header {
             background-color: var(--white);
             color: var(--primary-dark);
-            padding: 0.8rem 5%;
+            padding: 0.8rem 4%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 12px;
             border-bottom: 4px solid var(--secondary);
             box-shadow: 0 2px 10px rgba(0,0,0,0.06);
             position: sticky;
@@ -49,16 +50,18 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 14px;
+            max-width: 100%;
         }
 
         .brand img {
-            height: 68px;
+            height: 64px;
             width: auto;
+            flex-shrink: 0;
         }
 
         .brand-text h1 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--primary);
             letter-spacing: 0.3px;
         }
@@ -72,18 +75,20 @@
 
         nav {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
-            margin-top: 6px;
         }
 
         nav button {
             background: var(--bg-light);
             border: 1px solid var(--border);
             color: var(--primary-dark);
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
             transition: 0.2s;
         }
 
@@ -101,7 +106,7 @@
 
         .section {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.25s ease-in-out;
         }
 
         .section.active {
@@ -109,7 +114,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -141,6 +146,7 @@
 
         select {
             border: none;
+            background: transparent;
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--primary);
@@ -189,9 +195,68 @@
 
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 20px;
             margin-bottom: 1.8rem;
+        }
+
+        /* Linha inferior: Gráfico de Rosca + 3 Cartões Verticais */
+        .donut-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1.45fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .vertical-kpis {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            justify-content: space-between;
+        }
+
+        .side-kpi-card {
+            background: var(--white);
+            padding: 1.1rem 1.3rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border-left: 4px solid var(--primary);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .side-kpi-card.gold { border-left-color: var(--secondary); }
+        .side-kpi-card.navy { border-left-color: var(--primary-dark); }
+
+        .side-kpi-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+        }
+
+        .side-kpi-main {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 3px 0;
+            line-height: 1.25;
+        }
+
+        .side-kpi-pct {
+            color: var(--accent);
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .side-kpi-sub {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
         }
 
         .chart-card {
@@ -220,13 +285,13 @@
         .rm-chart-wrap {
             position: relative;
             width: 100%;
-            height: 430px;
+            height: 520px;
         }
 
         .donut-chart-wrap {
             position: relative;
             width: 100%;
-            height: 270px;
+            height: 310px;
         }
 
         .bar-chart-wrap {
@@ -370,6 +435,12 @@
             margin-top: 3rem;
             border-top: 1px solid var(--border);
         }
+
+        @media (max-width: 900px) {
+            .donut-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -383,14 +454,13 @@
             </div>
         </div>
         <nav>
-            <button class="active" onclick="showSection('dashboard', this)">Dashboard</button>
-            <button onclick="showSection('fotos', this)">Fotos de Atividades</button>
-            <button onclick="showSection('arquivos', this)">Arquivos & Guias</button>
+            <button type="button" class="active" onclick="showSection('dashboard', this)">Dashboard</button>
+            <button type="button" onclick="showSection('fotos', this)">Fotos de Atividades</button>
+            <button type="button" onclick="showSection('arquivos', this)">Arquivos &amp; Guias</button>
         </nav>
     </header>
 
     <main>
-        <!-- SEÇÃO 1: DASHBOARD GERAL COM FILTRO POR SUB -->
         <section id="dashboard" class="section active">
             <div class="section-header">
                 <h2>Panorama da Base CNOP</h2>
@@ -406,7 +476,6 @@
                 </div>
             </div>
 
-            <!-- KPIs Gerais + Estratégicos -->
             <div class="kpi-grid">
                 <div class="kpi-card navy">
                     <div class="kpi-title">Total de Cadastros</div>
@@ -430,15 +499,15 @@
                 </div>
             </div>
 
-            <!-- Gráficos -->
             <div class="charts-grid">
                 <div class="chart-card wide">
                     <h3 id="titulo-rm">Distribuição por RM/RE (Juventude Soka vs. Simpatizantes)</h3>
-                    <p class="chart-caption">Todas as RM/RE da seleção ordenadas pelo volume total (Juventude Soka vs. Simpatizantes).</p>
+                    <p class="chart-caption">Todas as RM/RE da seleção em ordem alfabética (Juventude Soka vs. Simpatizantes).</p>
                     <div class="rm-chart-wrap">
                         <canvas id="chartRm"></canvas>
                     </div>
                 </div>
+
                 <div class="chart-card">
                     <h3>Transição Etária 2027–2030 (Base vs. Liderança)</h3>
                     <p class="chart-caption">1.112 pessoas (30–39a) em transição adulta vs. 2.256 jovens até 29a de renovação.</p>
@@ -446,20 +515,41 @@
                         <canvas id="chartTransicao"></canvas>
                     </div>
                 </div>
-                <div class="chart-card">
-                    <h3>Grau de Estudo do Budismo (Kyogaku)</h3>
-                    <p class="chart-caption">76,1% (2.946) em Admissão; passagem para 1º Grau (489) e graus avançados é o gargalo-chave.</p>
-                    <div class="donut-chart-wrap">
-                        <canvas id="chartKyogaku"></canvas>
+
+                <div class="donut-row">
+                    <div class="chart-card">
+                        <h3>Grau de Estudo do Budismo (Kyogaku)</h3>
+                        <p class="chart-caption">76,1% (2.946) em Admissão; passagem para 1º Grau (489) e graus avançados é o gargalo-chave.</p>
+                        <div class="donut-chart-wrap">
+                            <canvas id="chartKyogaku"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="vertical-kpis">
+                        <div class="side-kpi-card gold">
+                            <div class="side-kpi-label">Kofu (Relativo ao Total)</div>
+                            <div class="side-kpi-main" id="side-kofu-ratio">1.009 / 3.869 <span class="side-kpi-pct">(26,1%)</span></div>
+                            <div class="side-kpi-sub">Adesão ao Kofu na seleção atual</div>
+                        </div>
+
+                        <div class="side-kpi-card">
+                            <div class="side-kpi-label">Impressos (Relativo ao Total)</div>
+                            <div class="side-kpi-main" id="side-imp-ratio">214 / 3.869 <span class="side-kpi-pct">(5,5%)</span></div>
+                            <div class="side-kpi-sub">Assinaturas de impressos na seleção atual</div>
+                        </div>
+
+                        <div class="side-kpi-card navy">
+                            <div class="side-kpi-label">Organização</div>
+                            <div class="side-kpi-main" id="side-org-estrutura">4 Subs | 12 RM | 81 Distritos</div>
+                            <div class="side-kpi-sub">Capilaridade territorial da base</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Diagnóstico Estratégico 2027-2030 -->
             <div class="insights-grid" id="painel-insights"></div>
         </section>
 
-        <!-- SEÇÃO 2: FOTOS DE ATIVIDADES -->
         <section id="fotos" class="section">
             <div class="section-header">
                 <h2>Mural de Atividades</h2>
@@ -469,10 +559,9 @@
             </div>
         </section>
 
-        <!-- SEÇÃO 3: ARQUIVOS E REPOSITÓRIO -->
         <section id="arquivos" class="section">
             <div class="section-header">
-                <h2>Biblioteca de Materiais & PDFs</h2>
+                <h2>Biblioteca de Materiais &amp; PDFs</h2>
             </div>
             <div class="files-list" id="lista-arquivos-automatica">
                 <p class="status-msg">Carregando documentos da pasta...</p>
@@ -562,27 +651,33 @@
         const dadosCNOP = {
             "TODAS": {
                 total: 3869, familias: 2945, js: 3404, simp: 455,
-                lgpd_pct: 30.8, lgpd_qtd: 1190, kofu_pct: 26.1, kofu_qtd: 1009,
-                impressos_pct: 5.5, funcoes: 472, ratio_js_lider: "7,2",
+                lgpd_pct: 30.8, lgpd_qtd: 1190,
+                kofu_pct: 26.1, kofu_qtd: 1009,
+                impressos_pct: 5.5, impressos_qtd: 214,
+                subs_count: 4, rm_count: 12, dist_count: 81,
+                funcoes: 472, ratio_js_lider: "7,2",
                 frente_qtd: 325, frente_pct: "68,9%",
                 faixas_base: [899, 1357, 1112, 479],
                 faixas_lideres: [16, 233, 205, 18],
                 potenciais_sucessores: 193,
                 kyogaku: [2946, 489, 242, 148, 43, 1],
                 rm_labels: [
-                    "BAURU", "ARAÇATUBA", "SÃO JOSÉ DO RIO PRETO", "ALTA MOGIANA",
-                    "WASHINGTON LUIS", "RIBEIRÃO PRETO SUL", "MARÍLIA", "RIBEIRÃO PRETO NORTE",
-                    "RIBEIRÃO PRETO LESTE", "NOROESTE PAULISTA", "PRESIDENTE PRUDENTE",
-                    "BANDEIRANTE-SP", "Sem RM/RE"
+                    "ALTA MOGIANA", "ARAÇATUBA", "BANDEIRANTE-SP", "BAURU",
+                    "MARÍLIA", "NOROESTE PAULISTA", "PRESIDENTE PRUDENTE",
+                    "RIBEIRÃO PRETO LESTE", "RIBEIRÃO PRETO NORTE", "RIBEIRÃO PRETO SUL",
+                    "SÃO JOSÉ DO RIO PRETO", "WASHINGTON LUIS", "Sem RM/RE"
                 ],
-                rm_js: [404, 383, 319, 287, 251, 273, 238, 271, 264, 203, 181, 174, 156],
-                rm_simp: [127, 21, 22, 44, 54, 25, 46, 10, 9, 38, 19, 22, 18],
+                rm_js: [287, 383, 174, 404, 238, 203, 181, 264, 271, 273, 319, 251, 156],
+                rm_simp: [44, 21, 22, 127, 46, 38, 19, 9, 10, 25, 22, 54, 18],
                 sem_rm: 174, sem_idade: 22
             },
             "SUDOESTE PAULISTA": {
                 total: 1019, familias: 811, js: 823, simp: 192,
-                lgpd_pct: 28.6, lgpd_qtd: 291, kofu_pct: 19.4, kofu_qtd: 198,
-                impressos_pct: 5.6, funcoes: 109, ratio_js_lider: "7,6",
+                lgpd_pct: 28.6, lgpd_qtd: 291,
+                kofu_pct: 19.4, kofu_qtd: 198,
+                impressos_pct: 5.6, impressos_qtd: 57,
+                subs_count: 1, rm_count: 3, dist_count: 22,
+                funcoes: 109, ratio_js_lider: "7,6",
                 frente_qtd: 72, frente_pct: "66,1%",
                 faixas_base: [211, 355, 289, 154],
                 faixas_lideres: [1, 60, 46, 2],
@@ -595,44 +690,53 @@
             },
             "NOROESTE PAULISTA": {
                 total: 989, familias: 733, js: 905, simp: 81,
-                lgpd_pct: 33.6, lgpd_qtd: 332, kofu_pct: 29.9, kofu_qtd: 296,
-                impressos_pct: 5.1, funcoes: 149, ratio_js_lider: "6,1",
+                lgpd_pct: 33.6, lgpd_qtd: 332,
+                kofu_pct: 29.9, kofu_qtd: 296,
+                impressos_pct: 5.1, impressos_qtd: 50,
+                subs_count: 1, rm_count: 3, dist_count: 17,
+                funcoes: 149, ratio_js_lider: "6,1",
                 frente_qtd: 111, frente_pct: "74,5%",
                 faixas_base: [272, 367, 259, 85],
                 faixas_lideres: [6, 72, 64, 7],
                 potenciais_sucessores: 45,
                 kyogaku: [742, 124, 66, 41, 15, 1],
-                rm_labels: ["ARAÇATUBA", "SÃO JOSÉ DO RIO PRETO", "NOROESTE PAULISTA"],
-                rm_js: [383, 319, 203],
-                rm_simp: [21, 22, 38],
+                rm_labels: ["ARAÇATUBA", "NOROESTE PAULISTA", "SÃO JOSÉ DO RIO PRETO"],
+                rm_js: [383, 203, 319],
+                rm_simp: [21, 38, 22],
                 sem_rm: 0, sem_idade: 6
             },
             "CENTRAL PAULISTA": {
                 total: 975, familias: 734, js: 854, simp: 119,
-                lgpd_pct: 34.7, lgpd_qtd: 338, kofu_pct: 28.1, kofu_qtd: 274,
-                impressos_pct: 5.8, funcoes: 107, ratio_js_lider: "8,0",
+                lgpd_pct: 34.7, lgpd_qtd: 338,
+                kofu_pct: 28.1, kofu_qtd: 274,
+                impressos_pct: 5.8, impressos_qtd: 57,
+                subs_count: 1, rm_count: 3, dist_count: 24,
+                funcoes: 107, ratio_js_lider: "8,0",
                 frente_qtd: 74, frente_pct: "69,2%",
                 faixas_base: [220, 323, 287, 142],
                 faixas_lideres: [5, 49, 49, 4],
                 potenciais_sucessores: 58,
                 kyogaku: [730, 127, 62, 40, 16, 0],
-                rm_labels: ["WASHINGTON LUIS", "RIBEIRÃO PRETO SUL", "BANDEIRANTE-SP", "Sem RM/RE"],
-                rm_js: [251, 273, 174, 156],
-                rm_simp: [54, 25, 22, 18],
+                rm_labels: ["BANDEIRANTE-SP", "RIBEIRÃO PRETO SUL", "WASHINGTON LUIS", "Sem RM/RE"],
+                rm_js: [174, 273, 251, 156],
+                rm_simp: [22, 25, 54, 18],
                 sem_rm: 174, sem_idade: 3
             },
             "PORTINARI": {
                 total: 886, familias: 674, js: 822, simp: 63,
-                lgpd_pct: 25.8, lgpd_qtd: 229, kofu_pct: 27.2, kofu_qtd: 241,
-                impressos_pct: 5.6, funcoes: 107, ratio_js_lider: "7,7",
+                lgpd_pct: 25.8, lgpd_qtd: 229,
+                kofu_pct: 27.2, kofu_qtd: 241,
+                impressos_pct: 5.6, impressos_qtd: 50,
+                subs_count: 1, rm_count: 3, dist_count: 19,
+                funcoes: 107, ratio_js_lider: "7,7",
                 frente_qtd: 68, frente_pct: "63,6%",
                 faixas_base: [196, 312, 277, 98],
                 faixas_lideres: [4, 52, 46, 5],
                 potenciais_sucessores: 34,
                 kyogaku: [695, 103, 53, 29, 6, 0],
-                rm_labels: ["ALTA MOGIANA", "RIBEIRÃO PRETO NORTE", "RIBEIRÃO PRETO LESTE"],
-                rm_js: [287, 271, 264],
-                rm_simp: [44, 10, 9],
+                rm_labels: ["ALTA MOGIANA", "RIBEIRÃO PRETO LESTE", "RIBEIRÃO PRETO NORTE"],
+                rm_js: [287, 264, 271],
+                rm_simp: [44, 9, 10],
                 sem_rm: 0, sem_idade: 3
             }
         };
@@ -641,11 +745,15 @@
             return Number(n).toLocaleString('pt-BR');
         }
 
+        function fmtPct(n) {
+            return `${Number(n).toFixed(1).replace('.', ',')}%`;
+        }
+
         const initialData = dadosCNOP["TODAS"];
 
         function ajustarAlturaRm(qtdCategorias) {
             const wrap = document.querySelector('.rm-chart-wrap');
-            const altura = Math.max(240, qtdCategorias * 36 + 65);
+            const altura = Math.max(260, qtdCategorias * 38 + 60);
             wrap.style.height = `${altura}px`;
         }
 
@@ -656,155 +764,4 @@
             data: {
                 labels: initialData.rm_labels,
                 datasets: [
-                    { label: 'Juventude Soka (JS)', data: initialData.rm_js, backgroundColor: '#4472B8', borderRadius: 4 },
-                    { label: 'Simpatizantes (SIMP)', data: initialData.rm_simp, backgroundColor: '#D99B26', borderRadius: 4 }
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top' }
-                },
-                scales: {
-                    x: { stacked: true, beginAtZero: true },
-                    y: { stacked: true }
-                }
-            }
-        });
-
-        const chartTransicao = new Chart(document.getElementById('chartTransicao').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Até 17a', '18–29a', '30–39a', '40+ anos'],
-                datasets: [
-                    { label: 'Total da Base', data: initialData.faixas_base, backgroundColor: '#4472B8', borderRadius: 4 },
-                    { label: 'Com Função', data: initialData.faixas_lideres, backgroundColor: '#D99B26', borderRadius: 4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top' }
-                },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-
-        const chartKyogaku = new Chart(document.getElementById('chartKyogaku').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Admissão', '1º Grau', '2º Grau', 'Grau Médio', 'Grau Superior', 'Prof. Adjunto'],
-                datasets: [{
-                    data: initialData.kyogaku,
-                    backgroundColor: ['#4472B8', '#D99B26', '#B93B3B', '#2B4C7E', '#0F766E', '#64748B'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '58%',
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            boxWidth: 14,
-                            padding: 12,
-                            font: { size: 12 }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                const val = ctx.parsed;
-                                const pct = total > 0 ? ((val / total) * 100).toFixed(1).replace('.', ',') : '0,0';
-                                return ` ${ctx.label}: ${fmtNum(val)} (${pct}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        function renderInsights(d) {
-            const admPct = ((d.kyogaku[0] / d.total) * 100).toFixed(1).replace('.', ',');
-            const lgpdPendentes = d.total - d.lgpd_qtd;
-            const renovacaoBase = d.faixas_base[0] + d.faixas_base[1];
-            const renovacaoPct = ((renovacaoBase / d.total) * 100).toFixed(1).replace('.', ',');
-
-            document.getElementById('painel-insights').innerHTML = `
-                <div class="insight-card goal">
-                    <h4>🎯 Transição & Sucessão (2027–2030)</h4>
-                    <ul>
-                        <li><strong>${fmtNum(d.faixas_lideres[2])} líderes</strong> estão entre <strong>30–39 anos</strong> e farão transição natural até 2030.</li>
-                        <li><strong>${fmtNum(d.potenciais_sucessores)} jovens (18–29a)</strong> sem função atual já têm <strong>1º Grau+</strong> para assumir novos papéis.</li>
-                        <li><strong>${fmtNum(renovacaoBase)} cadastros até 29 anos</strong> (${renovacaoPct}% da base) sustentam a renovação geracional.</li>
-                    </ul>
-                </div>
-                <div class="insight-card warn">
-                    <h4>⚠️ Gargalos de Formação & LGPD</h4>
-                    <ul>
-                        <li><strong>Kyogaku:</strong> ${admPct}% (${fmtNum(d.kyogaku[0])}) em <em>Admissão</em>; destravar a passagem para o 1º Grau é prioridade.</li>
-                        <li><strong>LGPD:</strong> ${fmtNum(lgpdPendentes)} cadastros (${(100 - d.lgpd_pct).toFixed(1).replace('.', ',')}%) ainda sem aceite, limitando contato digital direto.</li>
-                        <li><strong>Engajamento:</strong> ${d.kofu_pct.toFixed(1).replace('.', ',')}% no Kofu e ${d.impressos_pct.toFixed(1).replace('.', ',')}% em Impressos — reforça canais digitais ágeis.</li>
-                    </ul>
-                </div>
-                <div class="insight-card">
-                    <h4>🛠️ Liderança, Simpatizantes & Saneamento</h4>
-                    <ul>
-                        <li><strong>Capilaridade:</strong> ${d.frente_pct} da liderança (${fmtNum(d.frente_qtd)} de ${fmtNum(d.funcoes)}) atua em <em>Bloco</em> e <em>Comunidade</em> (1 líder / ${d.ratio_js_lider} JS).</li>
-                        <li><strong>Simpatizantes:</strong> ${fmtNum(d.simp)} registros (${((d.simp / d.total) * 100).toFixed(1).replace('.', ',')}%) concentram faixa 40+ e pedem abordagem própria.</li>
-                        <li><strong>Saneamento:</strong> ${d.sem_rm} sem RM/RE e ${d.sem_idade} sem idade numérica nesta seleção.</li>
-                    </ul>
-                </div>
-            `;
-        }
-
-        function updateDashboard() {
-            const sub = document.getElementById('subFilter').value;
-            const d = dadosCNOP[sub];
-            const jsShare = ((d.js / d.total) * 100).toFixed(1).replace('.', ',');
-
-            document.getElementById('kpi-total').innerText = fmtNum(d.total);
-            document.getElementById('kpi-sub-familias').innerText = `${fmtNum(d.familias)} famílias • ${d.sem_rm} sem RM/RE`;
-
-            document.getElementById('kpi-js').innerText = fmtNum(d.js);
-            document.getElementById('kpi-sub-js').innerText = `${jsShare}% da base • ${fmtNum(d.funcoes)} c/ função (1 p/ ${d.ratio_js_lider})`;
-
-            document.getElementById('kpi-lgpd').innerText = `${d.lgpd_pct.toFixed(1).replace('.', ',')}%`;
-            document.getElementById('kpi-sub-lgpd').innerText = `${fmtNum(d.lgpd_qtd)} aceitaram • ${fmtNum(d.faixas_lideres[2])} líd. (30–39a)`;
-
-            document.getElementById('kpi-kofu').innerText = `${d.kofu_pct.toFixed(1).replace('.', ',')}%`;
-            document.getElementById('kpi-sub-impressos').innerText = `${fmtNum(d.kofu_qtd)} Kofu • ${d.impressos_pct.toFixed(1).replace('.', ',')}% Imp. • ${fmtNum(d.potenciais_sucessores)} sucessores`;
-
-            document.getElementById('titulo-rm').innerText = sub === 'TODAS'
-                ? 'Distribuição por RM/RE (Juventude Soka vs. Simpatizantes)'
-                : `RM/RE em ${sub} (Juventude Soka vs. Simpatizantes)`;
-
-            ajustarAlturaRm(d.rm_labels.length);
-            chartRm.data.labels = d.rm_labels;
-            chartRm.data.datasets[0].data = d.rm_js;
-            chartRm.data.datasets[1].data = d.rm_simp;
-            chartRm.resize();
-            chartRm.update();
-
-            chartTransicao.data.datasets[0].data = d.faixas_base;
-            chartTransicao.data.datasets[1].data = d.faixas_lideres;
-            chartTransicao.update();
-
-            chartKyogaku.data.datasets[0].data = d.kyogaku;
-            chartKyogaku.update();
-
-            renderInsights(d);
-        }
-
-        renderInsights(initialData);
-        carregarFotosAutomaticas();
-        carregarArquivosAutomaticos();
-    </script>
-</body>
-</html>
+                    { label: 'Juventude Soka (JS)', data: initialData.rm_js, background
