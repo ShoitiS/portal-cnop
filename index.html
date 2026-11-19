@@ -55,7 +55,7 @@
         }
 
         .brand img {
-            height: 68px; /* Altura ajustada para o formato vertical ficar legível */
+            height: 68px;
             width: auto;
         }
 
@@ -213,7 +213,7 @@
         /* Galeria de Fotos */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 20px;
         }
 
@@ -224,22 +224,11 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
-        .photo-placeholder {
-            height: 190px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 600;
-            text-align: center;
-            padding: 15px;
-        }
-
         .photo-card img {
             width: 100%;
-            height: 190px;
+            height: 210px;
             object-fit: cover;
+            display: block;
         }
 
         .photo-info {
@@ -255,6 +244,16 @@
             padding: 3px 8px;
             border-radius: 4px;
             margin-bottom: 6px;
+        }
+
+        .photo-info h4 {
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+
+        .photo-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
         }
 
         /* Repositório de Arquivos / PDFs */
@@ -316,8 +315,7 @@
 
     <header>
         <div class="brand">
-            <!-- Aponta direto para o arquivo enviado na raiz do repositório -->
-            <img src="./assets/logo_CNOP_vertical.png" alt="Logo CNOP - Coordenadoria Norte Oeste Paulista">
+            <img src="./logo_CNOP_vertical.png" alt="Logo CNOP - Coordenadoria Norte Oeste Paulista">
             <div class="brand-text">
                 <h1>Juventude em Movimento</h1>
                 <span>Coordenadoria Norte Oeste Paulista • Valorizando cada passo</span>
@@ -390,27 +388,38 @@
             </div>
             <div class="photo-grid">
                 <div class="photo-card">
-                    <div class="photo-placeholder">Foto 1: Roda de Escuta Ativa<br>(Adicione ./fotos/foto1.jpg)</div>
+                    <img src="./fotos/kenshukai_chubu_participantes.jpeg" alt="Kenshukai Chubu Participantes">
                     <div class="photo-info">
-                        <span class="photo-tag">Cotia • Ciclo 1</span>
-                        <h4>Diagnóstico e Mapeamento de Talentos</h4>
-                        <p>Encontro de alinhamento com jovens para definição dos comitês locais.</p>
+                        <span class="photo-tag">Chubu • Encontro</span>
+                        <h4>Kenshukai Chubu</h4>
+                        <p>Participação e integração dos jovens no curso de aprimoramento.</p>
                     </div>
                 </div>
+
                 <div class="photo-card">
-                    <div class="photo-placeholder">Foto 2: Oficina de Oratória<br>(Adicione ./fotos/foto2.jpg)</div>
+                    <img src="./fotos/subtyokai_cnop.jpeg" alt="Subtyokai CNOP">
                     <div class="photo-info">
-                        <span class="photo-tag">Osasco • Ciclo 2</span>
-                        <h4>Capacitação em Comunicação e Liderança</h4>
-                        <p>Atividade prática conduzida pelos próprios jovens do comitê de cultura.</p>
+                        <span class="photo-tag">CNOP • Liderança</span>
+                        <h4>Subtyokai CNOP</h4>
+                        <p>Reunião de alinhamento e planejamento das ações da coordenadoria.</p>
                     </div>
                 </div>
+
                 <div class="photo-card">
-                    <div class="photo-placeholder">Foto 3: Ação Comunitária<br>(Adicione ./fotos/foto3.jpg)</div>
+                    <img src="./fotos/25_anos_CCRP_Comissoes.jpeg" alt="25 anos CCRP Comissões">
                     <div class="photo-info">
-                        <span class="photo-tag">Barueri • Ciclo 2</span>
-                        <h4>Semente de Valor na Comunidade</h4>
-                        <p>Mutirão de diálogo e integração cultural realizado no fim de semana.</p>
+                        <span class="photo-tag">CCRP • Comemoração</span>
+                        <h4>25 Anos CCRP — Comissões</h4>
+                        <p>Atuação das comissões jovens na celebração dos 25 anos do CCRP.</p>
+                    </div>
+                </div>
+
+                <div class="photo-card">
+                    <img src="./fotos/Show_de_Talentos_Alta_Mogiana.jpeg" alt="Show de Talentos Alta Mogiana">
+                    <div class="photo-info">
+                        <span class="photo-tag">Alta Mogiana • Cultura</span>
+                        <h4>Show de Talentos Alta Mogiana</h4>
+                        <p>Expressão artística, música e protagonismo juvenil na região.</p>
                     </div>
                 </div>
             </div>
