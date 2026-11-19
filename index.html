@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNOP | Portal e Dashboard de Engajamento Jovem</title>
-    <!-- Biblioteca gratuita para gráficos interativos -->
+    <title>CNOP | Coordenadoria Norte Oeste Paulista - Juventude</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            /* Paleta inspirada em Criação de Valor / Soka (Ajustável para as cores exatas do CNOP) */
-            --primary: #1B365D;      /* Azul Profundo (Confiança e Sabedoria) */
-            --secondary: #E69F00;    /* Dourado / Âmbar (Valor e Energia Jovem) */
-            --accent: #007A5E;       /* Verde Esmeralda (Crescimento Contínuo) */
-            --bg-light: #F4F6F9;
+            /* Paleta oficial extraída do Logo CNOP */
+            --primary: #4472B8;      /* Azul CNOP */
+            --primary-dark: #2B4C7E; /* Azul Profundo para textos e contrastes */
+            --secondary: #D99B26;    /* Dourado Solar */
+            --accent: #B93B3B;       /* Vermelho / Terracota */
+            --bg-light: #F8FAFC;
             --text-dark: #1E293B;
             --text-muted: #64748B;
             --white: #FFFFFF;
@@ -32,16 +32,17 @@
             line-height: 1.6;
         }
 
-        /* Cabeçalho e Navegação */
+        /* Cabeçalho claro para destacar o Logo Vertical CNOP */
         header {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 1rem 5%;
+            background-color: var(--white);
+            color: var(--primary-dark);
+            padding: 0.8rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -50,38 +51,37 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
         .brand img {
-            height: 45px;
+            height: 68px; /* Altura ajustada para o formato vertical ficar legível */
             width: auto;
-            border-radius: 6px;
-            background: var(--white);
-            padding: 2px;
         }
 
         .brand-text h1 {
-            font-size: 1.3rem;
-            letter-spacing: 0.5px;
+            font-size: 1.25rem;
+            color: var(--primary);
+            letter-spacing: 0.3px;
         }
 
         .brand-text span {
-            font-size: 0.8rem;
-            color: var(--secondary);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
             display: block;
         }
 
         nav {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            gap: 8px;
+            margin-top: 6px;
         }
 
         nav button {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: var(--white);
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            color: var(--primary-dark);
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
@@ -90,8 +90,9 @@
         }
 
         nav button:hover, nav button.active {
-            background: var(--secondary);
-            color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
         }
 
         /* Container Principal */
@@ -101,7 +102,6 @@
             padding: 0 20px;
         }
 
-        /* Controle de Abas / Seções */
         .section {
             display: none;
             animation: fadeIn 0.3s ease-in-out;
@@ -126,13 +126,12 @@
         }
 
         .section-header h2 {
-            color: var(--primary);
-            font-size: 1.6rem;
-            border-left: 5px solid var(--secondary);
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            border-left: 5px solid var(--accent);
             padding-left: 12px;
         }
 
-        /* Filtro por Cidade */
         .filter-box {
             display: flex;
             align-items: center;
@@ -169,10 +168,10 @@
         }
 
         .kpi-card.gold { border-top-color: var(--secondary); }
-        .kpi-card.green { border-top-color: var(--accent); }
+        .kpi-card.red { border-top-color: var(--accent); }
 
         .kpi-title {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
@@ -181,13 +180,13 @@
         .kpi-value {
             font-size: 2.2rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--primary-dark);
             margin: 8px 0;
         }
 
         .kpi-sub {
             font-size: 0.8rem;
-            color: var(--accent);
+            color: var(--primary);
             font-weight: 600;
         }
 
@@ -207,7 +206,7 @@
 
         .chart-card h3 {
             font-size: 1.05rem;
-            color: var(--primary);
+            color: var(--primary-dark);
             margin-bottom: 1rem;
         }
 
@@ -227,7 +226,7 @@
 
         .photo-placeholder {
             height: 190px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -237,7 +236,6 @@
             padding: 15px;
         }
 
-        /* Quando tiver fotos reais, use a tag <img> dentro de .photo-card */
         .photo-card img {
             width: 100%;
             height: 190px;
@@ -278,7 +276,7 @@
         }
 
         .file-info h4 {
-            color: var(--primary);
+            color: var(--primary-dark);
             font-size: 1rem;
             margin-bottom: 4px;
         }
@@ -318,11 +316,11 @@
 
     <header>
         <div class="brand">
-            <!-- Coloque o arquivo logo-cnop.png dentro da pasta assets -->
-            <img src="./assets/logo-cnop.png" alt="Logo CNOP" onerror="this.style.display='none'">
+            <!-- Aponta direto para o arquivo enviado na raiz do repositório -->
+            <img src="./assets/logo_CNOP_vertical.png" alt="Logo CNOP - Coordenadoria Norte Oeste Paulista">
             <div class="brand-text">
-                <h1>CNOP • Juventude em Movimento</h1>
-                <span>Valorizando cada passo, transformando realidades</span>
+                <h1>Juventude em Movimento</h1>
+                <span>Coordenadoria Norte Oeste Paulista • Valorizando cada passo</span>
             </div>
         </div>
         <nav>
@@ -340,10 +338,10 @@
                 <div class="filter-box">
                     <label for="cityFilter">📍 Localidade:</label>
                     <select id="cityFilter" onchange="updateDashboard()">
-                        <option value="todas">Todas as Cidades (Geral)</option>
-                        <option value="sp">São Paulo - Capital</option>
+                        <option value="todas">Todas as Cidades (CNOP Geral)</option>
                         <option value="cotia">Cotia e Região</option>
-                        <option value="campinas">Campinas</option>
+                        <option value="osasco">Osasco / Carapicuíba</option>
+                        <option value="barueri">Barueri / Alphaville</option>
                     </select>
                 </div>
             </div>
@@ -360,7 +358,7 @@
                     <div class="kpi-value" id="kpi-ciclos">12</div>
                     <div class="kpi-sub">8 concluídos • 4 ativos</div>
                 </div>
-                <div class="kpi-card green">
+                <div class="kpi-card red">
                     <div class="kpi-title">Cidades Atuantes</div>
                     <div class="kpi-value" id="kpi-cidades">9</div>
                     <div class="kpi-sub">100% com comitê jovem</div>
@@ -392,18 +390,17 @@
             </div>
             <div class="photo-grid">
                 <div class="photo-card">
-                    <!-- Substitua a div abaixo por: <img src="./fotos/atividade1.jpg" alt="Descrição"> -->
                     <div class="photo-placeholder">Foto 1: Roda de Escuta Ativa<br>(Adicione ./fotos/foto1.jpg)</div>
                     <div class="photo-info">
-                        <span class="photo-tag">São Paulo • Ciclo 1</span>
+                        <span class="photo-tag">Cotia • Ciclo 1</span>
                         <h4>Diagnóstico e Mapeamento de Talentos</h4>
-                        <p>Encontro de alinhamento com 35 jovens para definição dos comitês locais.</p>
+                        <p>Encontro de alinhamento com jovens para definição dos comitês locais.</p>
                     </div>
                 </div>
                 <div class="photo-card">
                     <div class="photo-placeholder">Foto 2: Oficina de Oratória<br>(Adicione ./fotos/foto2.jpg)</div>
                     <div class="photo-info">
-                        <span class="photo-tag">Cotia • Ciclo 2</span>
+                        <span class="photo-tag">Osasco • Ciclo 2</span>
                         <h4>Capacitação em Comunicação e Liderança</h4>
                         <p>Atividade prática conduzida pelos próprios jovens do comitê de cultura.</p>
                     </div>
@@ -411,7 +408,7 @@
                 <div class="photo-card">
                     <div class="photo-placeholder">Foto 3: Ação Comunitária<br>(Adicione ./fotos/foto3.jpg)</div>
                     <div class="photo-info">
-                        <span class="photo-tag">Campinas • Ciclo 2</span>
+                        <span class="photo-tag">Barueri • Ciclo 2</span>
                         <h4>Semente de Valor na Comunidade</h4>
                         <p>Mutirão de diálogo e integração cultural realizado no fim de semana.</p>
                     </div>
@@ -430,7 +427,6 @@
                         <h4>📘 Guia do Plano Estratégico CNOP</h4>
                         <p>PDF • Pilares de engajamento e dinâmica dos comitês jovens.</p>
                     </div>
-                    <!-- Salve o PDF dentro da pasta /arquivos com esse nome -->
                     <a href="./arquivos/plano-estrategico-cnop.pdf" target="_blank" class="btn-download">Abrir PDF</a>
                 </div>
 
@@ -454,11 +450,10 @@
     </main>
 
     <footer>
-        CNOP • Repositório e Indicadores da Juventude • Atualizado continuamente
+        CNOP • Coordenadoria Norte Oeste Paulista • Repositório e Indicadores da Juventude
     </footer>
 
     <script>
-        // 1. Navegação entre abas
         function showSection(sectionId, btnElement) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
@@ -467,15 +462,13 @@
             btnElement.classList.add('active');
         }
 
-        // 2. Dados simulados por cidade (Fácil de atualizar ou conectar ao Google Sheets depois)
         const dadosPorCidade = {
-            todas: { jovens: 148, ciclos: 12, cidades: 9, dialogos: 320, evolucao: [45, 78, 112, 148] },
-            sp:    { jovens: 62,  ciclos: 5,  cidades: 1, dialogos: 140, evolucao: [20, 35, 50, 62] },
-            cotia: { jovens: 46,  ciclos: 4,  cidades: 1, dialogos: 95,  evolucao: [15, 25, 34, 46] },
-            campinas: { jovens: 40, ciclos: 3, cidades: 1, dialogos: 85, evolucao: [10, 18, 28, 40] }
+            todas:   { jovens: 148, ciclos: 12, cidades: 9, dialogos: 320, evolucao: [45, 78, 112, 148] },
+            cotia:   { jovens: 62,  ciclos: 5,  cidades: 1, dialogos: 140, evolucao: [20, 35, 50, 62] },
+            osasco:  { jovens: 46,  ciclos: 4,  cidades: 1, dialogos: 95,  evolucao: [15, 25, 34, 46] },
+            barueri: { jovens: 40,  ciclos: 3,  cidades: 1, dialogos: 85,  evolucao: [10, 18, 28, 40] }
         };
 
-        // 3. Inicialização dos Gráficos (Chart.js)
         const ctxEvolucao = document.getElementById('chartEvolucao').getContext('2d');
         const chartEvolucao = new Chart(ctxEvolucao, {
             type: 'line',
@@ -484,8 +477,8 @@
                 datasets: [{
                     label: 'Jovens Participantes',
                     data: dadosPorCidade.todas.evolucao,
-                    borderColor: '#1B365D',
-                    backgroundColor: 'rgba(230, 159, 0, 0.2)',
+                    borderColor: '#4472B8',
+                    backgroundColor: 'rgba(217, 155, 38, 0.2)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.3
@@ -501,13 +494,12 @@
                 labels: ['Comunicação & Arte', 'Diálogos & Acolhimento', 'Eventos & Cultura', 'Impacto Social'],
                 datasets: [{
                     data: [30, 35, 20, 15],
-                    backgroundColor: ['#1B365D', '#E69F00', '#007A5E', '#64748B']
+                    backgroundColor: ['#4472B8', '#D99B26', '#B93B3B', '#64748B']
                 }]
             },
             options: { responsive: true }
         });
 
-        // 4. Atualização ao mudar o filtro de cidade
         function updateDashboard() {
             const cidade = document.getElementById('cityFilter').value;
             const dados = dadosPorCidade[cidade];
